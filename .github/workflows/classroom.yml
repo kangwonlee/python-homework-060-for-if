@@ -56,7 +56,7 @@ jobs:
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
         command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=report_linear.json tests/"
         timeout: 2
-        max-score: 2
+        max-score: 5
 
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
