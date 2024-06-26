@@ -48,22 +48,44 @@ jobs:
         echo $VIRTUAL_ENV
         pip install -r requirements.txt
 
+    - name: check grammar
+      id: check-grammar
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: check grammar
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=report_grammar.json tests/test_grammar.py"
+        timeout: 1
+        max-score: 2
+
+    - name: all lines in the function
+      id: all-lines-in-the-function
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: all lines in the function
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=report_lines.json tests/test_lines_in_function.py"
+        timeout: 1
+        max-score: 1
+  
     - name: test results
       id: test-results
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: test result linear
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=report_linear.json tests/"
+        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=report_linear.json tests/test_results.py"
         timeout: 2
-        max-score: 5
+        max-score: 2
 
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
+        CHECK-GRAMMAR_RESULTS: "${{steps.check-grammar.outputs.result}}"
+        ALL-LINES-IN-THE-FUNCTION_RESULTS: "${{steps.all-lines-in-the-function.outputs.result}}"
         TEST-RESULTS_RESULTS: "${{steps.test-results.outputs.result}}"
       with:
-        runners: test-results
+        runners: check-grammar,all-lines-in-the-function,test-results
 
     - name: upload artifacts
       id: artifacts
