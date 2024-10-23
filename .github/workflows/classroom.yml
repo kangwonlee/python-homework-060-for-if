@@ -61,7 +61,7 @@ jobs:
       with:
         test-name: check syntax
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py && python -m json.tool ${{ steps.json.outputs.syntax }} ${{ steps.json.outputs.syntax }}.json"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py ; python -m json.tool ${{ steps.json.outputs.syntax }} ${{ steps.json.outputs.syntax }}.json"
         timeout: 1
         max-score: 1
 
@@ -71,7 +71,7 @@ jobs:
       with:
         test-name: check style
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py && python -m json.tool ${{ steps.json.outputs.style }} ${{ steps.json.outputs.style }}.json"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py ; python -m json.tool ${{ steps.json.outputs.style }} ${{ steps.json.outputs.style }}.json"
         timeout: 1
         max-score: 1
   
@@ -81,7 +81,7 @@ jobs:
       with:
         test-name: test results
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py && python -m json.tool ${{ steps.json.outputs.syntax }} ${{ steps.json.outputs.results }}.json"
+        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py ; python -m json.tool ${{ steps.json.outputs.syntax }} ${{ steps.json.outputs.results }}.json"
         timeout: 2
         max-score: 3
 
