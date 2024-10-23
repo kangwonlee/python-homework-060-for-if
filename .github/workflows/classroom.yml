@@ -105,6 +105,17 @@ jobs:
       id: ai-tutor
       if: always()
       timeout-minutes: 2
+
+    - name: pretty json
+      run: |
+        python -m json.tool --indent 4 $CHECK_SYNTAX_RESULTS $CHECK_SYNTAX_RESULTS
+        python -m json.tool --indent 4 $CHECK_STYLE_RESULTS  $CHECK_STYLE_RESULTS
+        python -m json.tool --indent 4 $TEST_RESULTS_RESULTS $TEST_RESULTS_RESULTS
+      env:
+        CHECK_SYNTAX_RESULTS: "${{ steps.json.outputs.syntax  }}"
+        CHECK_STYLE_RESULTS : "${{ steps.json.outputs.style   }}"
+        TEST_RESULTS_RESULTS: "${{ steps.json.outputs.results }}"
+      if: always()
   
     - name: upload artifacts
       id: artifacts
