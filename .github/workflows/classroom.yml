@@ -58,13 +58,13 @@ jobs:
         timeout: 1
         max-score: 2
 
-    - name: all lines in the function
-      id: all-lines-in-the-function
+    - name: check style
+      id: check-style
       uses: classroom-resources/autograding-command-grader@v1
       with:
-        test-name: all lines in the function
+        test-name: check style
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=report_lines.json tests/test_lines_in_function.py"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=report_lines.json tests/test_style.py"
         timeout: 1
         max-score: 1
   
@@ -82,10 +82,10 @@ jobs:
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
         CHECK-SYNTAX_RESULTS: "${{steps.check-syntax.outputs.result}}"
-        ALL-LINES-IN-THE-FUNCTION_RESULTS: "${{steps.all-lines-in-the-function.outputs.result}}"
+        CHECK-STYLE_RESULTS: "${{steps.check-style.outputs.result}}"
         TEST-RESULTS_RESULTS: "${{steps.test-results.outputs.result}}"
       with:
-        runners: check-syntax,all-lines-in-the-function,test-results
+        runners: check-syntax,check-style,test-results
 
     - name: upload artifacts
       id: artifacts
