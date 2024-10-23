@@ -12,23 +12,23 @@ proj_folder = pytest_folder.parent.absolute()
 sys.path.insert(0, str(proj_folder))
 
 
-import ex05
+import exercise
 
 
 random.seed()
 
 @pytest.fixture
 def func05() -> callable:
-    if not hasattr(ex05, 'func05'):
+    if not hasattr(exercise, 'func05'):
         found = []
-        for name in dir(ex05):
-            if callable(getattr(ex05, name)):
-                found.append(getattr(ex05, name))
-        assert 0 < len(found), f"Found no functions in ex05.py: {found}"
-        assert len(found) == 1, f"Found more than one function in ex05.py: {found}"
+        for name in dir(exercise):
+            if callable(getattr(exercise, name)):
+                found.append(getattr(exercise, name))
+        assert 0 < len(found), f"Found no functions in exercise.py: {found}"
+        assert len(found) == 1, f"Found more than one function in exercise.py: {found}"
         result = found[0]
     else:
-        result = ex05.func05
+        result = exercise.func05
     return result
 
 
