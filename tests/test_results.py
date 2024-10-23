@@ -18,8 +18,8 @@ import exercise
 random.seed()
 
 @pytest.fixture
-def func05() -> callable:
-    if not hasattr(exercise, 'func05'):
+def for_with_if() -> callable:
+    if not hasattr(exercise, 'for_with_if'):
         found = []
         for name in dir(exercise):
             if callable(getattr(exercise, name)):
@@ -28,7 +28,7 @@ def func05() -> callable:
         assert len(found) == 1, f"Found more than one function in exercise.py: {found}"
         result = found[0]
     else:
-        result = exercise.func05
+        result = exercise.for_with_if
     return result
 
 
@@ -52,12 +52,12 @@ def even_sum(a, b) -> int:
     return sum(i for i in range(a, b) if ((i % 2) == 0))
 
 
-def test_func05_odd(func05,a, b, odd_sum):
-    assert func05(a, b, 1) == odd_sum
+def test_for_with_if_odd(for_with_if,a, b, odd_sum):
+    assert for_with_if(a, b, 1) == odd_sum
 
 
-def test_func05_even(func05, a, b, even_sum):
-    assert func05(a, b, 0) == even_sum
+def test_for_with_if_even(for_with_if, a, b, even_sum):
+    assert for_with_if(a, b, 0) == even_sum
 
 
 if "__main__" == __name__:
