@@ -17,6 +17,14 @@
 * [커밋 및 푸시] 선택
 * 줄 셋 의 [리포지토리로 이동] 선택하여 저장소로 복귀
 
+## Grading Criteria<br>채점 기준
+
+| Criteria<br>기준 | Points<br>배점 |
+|:-----:|:-----:|
+| Is the code written according to Python syntax?<br>Python 문법대로 작성되었는가? | 1 |
+| Does code respect style guidelines?<br>코드 스타일 권고사항을 준수하는가? | 1 |
+| Is the code implemented as required?<br>코드가 요구사항을 만족하는가? | 3 |
+
 ## NOTICE REGARDING STUDENT SUBMISSIONS<br>제출 결과물에 대한 알림
 
 * Your submissions for this assignment may be used for various educational purposes. These purposes may include developing and improving educational tools, research, creating test cases, and training datasets.<br>제출 결과물은 다양한 교육 목적으로 사용될 수 있을 밝혀둡니다. (교육 도구 개발 및 개선, 연구, 테스트 케이스 및 교육용 데이터셋 생성 등).
