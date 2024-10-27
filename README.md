@@ -1,29 +1,40 @@
 ## Exercise: `for` with `if`<br>`for` 와 `if` 문
 
+**Please edit and submit exercise.py file.**<br>**exercise.py 파일을 수정하여 제출하세요.**
+
 ### Objective<br>목표
+
 * Practice using conditional statements within loops.<br>반복문 내에서 조건문 사용 연습
 
-### Assignment
+### Function description<br>함수 설명
 The `for_with_if` function in `exercise.py` is supposed to calculate the sum of either odd or even numbers within a given range. Your task is to fix it according to these requirements:
-* The function should take three arguments:
-    * `a`: The starting value of the range (inclusive).
-    * `b`: The ending value of the range (exclusive).
-    * `odd`: A boolean flag; `True` if the sum of odd numbers is requested, `False` for even numbers.
-* The function should return the calculated sum based on the `odd` flag.
-* Please do not use `input()` function in the `exercise.py` file.
 
-### 과제
-* 실습파일 : exercise.py
-* 이름이 `for_with_if`인 함수를 다음과 같이 완성하시오
-* 매개변수로 `a`와 `b`, `c` 를 받아 들이시오
-  * `a`, `b`는 정수로 `a` 보다 `b` 가 큰 값일 것임
-  * `c`는 `0` 또는 `1`
-* 함수의 반환값:
-  * `c`가 `1` 이면 `a` 이상 `b` 미만인 홀수의 합
-  * `c`가 `0` 이면 `a` 이상 `b` 미만인 짝수의 합
-* 제출하기 전 코드가 바르게 작동하는지 확인하시오
-* 해당 파이썬 스크립트 파일에는 해당 함수만 제출 
-* `exercise.py` 파일 안에서 `input()` 함수를 사용하지 마세요.
+`exercies.py` 파일의 `for_with_if` 함수는 주어진 범위 내에서 홀수 또는 짝수의 합을 계산하는 것이 목적입니다. 다음 요구 사항에 따라 완성 바랍니다.
+
+* The function should take three arguments:<br>해당 함수는 세 개의 인수를 받아야 합니다.
+
+| Argument | Type | Description |
+|:---|:---|:---|
+| `a` | `int` | The starting value of the range (inclusive).<br>범위의 시작값(포함) |
+| `b` | `int` | The ending value of the range (exclusive).<br>범위의 끝값(미포함) |
+| `c` | `bool` | A boolean flag; `1` if the sum of odd numbers is requested, `0` for even numbers.<br>참이면 홀수의 합, 거짓이면 짝수의 합을 계산 |
+
+* The function should return the calculated sum based on the `c` flag.<br>`c` 값에 따라 계산된 합을 반환해야 합니다.
+* Please do not use `input()` function in the `exercise.py` file.<br>`exercise.py` 파일 안에서 `input()` 함수를 사용하지 마세요.
+
+## How to run .py file on a shell 쉘에서 실행해 보는 방법
+
+1. Complete the function of the file.<br>해당 파일의 해당 함수를 완성합니다.
+1. On a shell, run `python sample.py` file.<br>터미널에서 `python sample.py` 명령을 실행하여 결과를 확인합니다.
+
+## How to run the function on Google Colab<br>함수를 구글 코랩에서 실행해보는 방법 예
+1. Make sure you've completed the `product()` function in `exercise.py` before running this.<br>실행 전 `exercise.py` 의 `product()` 함수를 완성.
+1. Open Google Colab: Go to https://colab.research.google.com/ and create a new notebook.<br>구글 코랩을 연다 : https://colab.research.google.com/ 로 가서 새로운 노트북을 생성
+1. Upload the .py files:<br>.py 파일을 업로드
+    1. Click on the "Files" icon on the left sidebar.<br>왼쪽 테두리 위의 Files 아이콘 선택
+    1. Click on the "Upload" button and select your `exercise.py` and `sample.py` files.<br>업로드 버튼을 선택하고 `exercise.py`, `sample.py` 파일 선택
+1. Run the code<br>코드 실행:
+    1. In a new code cell, type `!python sample.py` and press <kbd>Shift</kbd>+<kbd>Enter</kbd> to execute it.<br>새 코드 셀에서 `!python sample.py`을 입력하고 <kbd>Shift</kbd>+<kbd>Enter</kbd> 를 눌러 실행
 
 ## Grading Criteria<br>채점 기준
 

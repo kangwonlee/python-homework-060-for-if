@@ -54,17 +54,22 @@ def test_importable(py_file:pathlib.Path):
     assert m is not None
 
 
-def test_no_input_function(py_file: pathlib.Path):
-    """Checks that the exercise.py file does not use the input() function."""
+@pytest.mark.parametrize("prohibited_function", ["input", "map", "sum"])
+def test_no_prohibited_functions(py_file: pathlib.Path, prohibited_function:str):
+    """Checks that the exercise.py file does not use prohibited functions."""
 
     code = py_file.read_text(encoding="utf-8")
     tree = ast.parse(code)
 
     for node in ast.walk(tree):
-        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "input":
+        if (
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == prohibited_function
+        ):
             pytest.fail(
-                f"Use of 'input()' function is prohibited in exercise.py.\n"
-                f"'input()' 함수를 사용하지 마십시오."
+                f"Use of '{prohibited_function}()' function is prohibited in exercise.py.\n"
+                f"'{prohibited_function}()' 함수를 사용하지 마십시오."
             )
 
 
