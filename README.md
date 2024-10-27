@@ -1,4 +1,18 @@
-## `for` with `if`<br>`for` 와 `if` 문
+## Exercise: `for` with `if`<br>`for` 와 `if` 문
+
+### Objective<br>목표
+* Practice using conditional statements within loops.<br>반복문 내에서 조건문 사용 연습
+
+### Assignment
+The `for_with_if` function in `exercise.py` is supposed to calculate the sum of either odd or even numbers within a given range. Your task is to fix it according to these requirements:
+* The function should take three arguments:
+    * `a`: The starting value of the range (inclusive).
+    * `b`: The ending value of the range (exclusive).
+    * `odd`: A boolean flag; `True` if the sum of odd numbers is requested, `False` for even numbers.
+* The function should return the calculated sum based on the `odd` flag.
+* Please do not use `input()` function in the `exercise.py` file.
+
+### 과제
 * 실습파일 : exercise.py
 * 이름이 `for_with_if`인 함수를 다음과 같이 완성하시오
 * 매개변수로 `a`와 `b`, `c` 를 받아 들이시오
@@ -9,7 +23,7 @@
   * `c`가 `0` 이면 `a` 이상 `b` 미만인 짝수의 합
 * 제출하기 전 코드가 바르게 작동하는지 확인하시오
 * 해당 파이썬 스크립트 파일에는 해당 함수만 제출 
-* Please do not use `input()` function in the functions.<br>함수 내에서 `input()` 함수를 사용하지 마세요.
+* `exercise.py` 파일 안에서 `input()` 함수를 사용하지 마세요.
 
 ## Grading Criteria<br>채점 기준
 
