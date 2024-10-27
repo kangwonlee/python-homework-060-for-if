@@ -1,6 +1,5 @@
 import pathlib
 import random
-import os
 import sys
 
 import pytest

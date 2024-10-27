@@ -54,5 +54,19 @@ def test_importable(py_file:pathlib.Path):
     assert m is not None
 
 
+def test_no_input_function(py_file: pathlib.Path):
+    """Checks that the exercise.py file does not use the input() function."""
+
+    code = py_file.read_text(encoding="utf-8")
+    tree = ast.parse(code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "input":
+            pytest.fail(
+                f"Use of 'input()' function is prohibited in exercise.py.\n"
+                f"'input()' 함수를 사용하지 마십시오."
+            )
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
