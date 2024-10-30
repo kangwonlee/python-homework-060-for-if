@@ -20,7 +20,7 @@ The `for_with_if` function in `exercise.py` is supposed to calculate the sum of 
 | `c` | `bool` | A boolean flag; `1` if the sum of odd numbers is requested, `0` for even numbers.<br>참이면 홀수의 합, 거짓이면 짝수의 합을 계산 |
 
 * The function should return the calculated sum based on the `c` flag.<br>`c` 값에 따라 계산된 합을 반환해야 합니다.
-* Please do not use `input()` function in the `exercise.py` file.<br>`exercise.py` 파일 안에서 `input()` 함수를 사용하지 마세요.
+* Please do not use `input()`, `map()`, or `sum()` functions in the `exercise.py` file.<br>`exercise.py` 파일 안에서 `input()`, `map()`, 또는 `sum()` 함수를 사용하지 마세요.
 
 ## How to run .py file on a shell 쉘에서 실행해 보는 방법
 
