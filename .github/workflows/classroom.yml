@@ -116,7 +116,7 @@ jobs:
         CHECK_STYLE_RESULTS : "${{ steps.json.outputs.style   }}"
         TEST_RESULTS_RESULTS: "${{ steps.json.outputs.results }}"
       if: always()
-  
+
     - name: upload artifacts
       id: artifacts
       uses: actions/upload-artifact@v4
