@@ -61,7 +61,7 @@ jobs:
       with:
         test-name: check syntax
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py"
         timeout: 1
         max-score: 1
 
@@ -71,7 +71,7 @@ jobs:
       with:
         test-name: check style
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py"
         timeout: 1
         max-score: 1
   
@@ -81,7 +81,7 @@ jobs:
       with:
         test-name: test results
         setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py"
+        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py"
         timeout: 2
         max-score: 3
 
@@ -105,17 +105,6 @@ jobs:
       id: ai-tutor
       if: always()
       timeout-minutes: 2
-
-    - name: pretty json
-      run: |
-        python -m json.tool --indent 4 $CHECK_SYNTAX_RESULTS $CHECK_SYNTAX_RESULTS
-        python -m json.tool --indent 4 $CHECK_STYLE_RESULTS  $CHECK_STYLE_RESULTS
-        python -m json.tool --indent 4 $TEST_RESULTS_RESULTS $TEST_RESULTS_RESULTS
-      env:
-        CHECK_SYNTAX_RESULTS: "${{ steps.json.outputs.syntax  }}"
-        CHECK_STYLE_RESULTS : "${{ steps.json.outputs.style   }}"
-        TEST_RESULTS_RESULTS: "${{ steps.json.outputs.results }}"
-      if: always()
 
     - name: upload artifacts
       id: artifacts
