@@ -31,27 +31,13 @@ jobs:
         source test-env/bin/activate
         echo $VIRTUAL_ENV
 
-    - name: Get pip cache dir
-      id: pip-cache
-      run: |
-        source test-env/bin/activate
-        echo $VIRTUAL_ENV
-        echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
-    - name: pip cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
   
     - name: Setup test environment
       id: setup-env
       run: |
         source test-env/bin/activate
         echo $VIRTUAL_ENV
-        pip install -r requirements.txt
+        uv pip install -r requirements.txt
 
     - name: Set report file names
       id: json
