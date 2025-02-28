@@ -1,5 +1,5 @@
 name: Autograding Tests
-'on':
+on:
   - push
   - workflow_dispatch
   - repository_dispatch
@@ -17,33 +17,51 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Pull Docker Image
-      run: docker pull ghcr.io/kangwonlee/edu-base:0.2.4 # Pull your Docker image
-
     - name: Set report file names
       id: json
       run: |
-        echo "syntax=report_syntax.json" >> $GITHUB_OUTPUT
-        echo "style=report_style.json" >> $GITHUB_OUTPUT
-        echo "results=report_results.json" >> $GITHUB_OUTPUT
+        echo "syntax=report_syntax.json" >> $GITHUB_ENV
+        echo "style=report_style.json" >> $GITHUB_ENV
+        echo "results=report_results.json" >> $GITHUB_ENV
+        echo "image_url=${{ vars.PYTHON_GRADER_060 }}" >> $GITHUB_ENV
+        echo "workflow_student_code_folder=${{ github.workspace }}" >> $GITHUB_ENV
+        echo "container_mounting_point=/app/workspace" >> $GITHUB_ENV
+
+    # container_json_report_folder has to be a location under
+    #   `container_mounting_point`
+    - name: Set folders within the container
+      run: |
+        echo "container_student_code_folder=${{ env.container_mounting_point }}" >> $GITHUB_ENV
+        echo "container_test_code_folder=/tests" >> $GITHUB_ENV
+        echo "container_json_report_folder=${{ env.container_mounting_point }}" >> $GITHUB_ENV
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.CR_PAT }}
+
+    - name: Pull Docker Image
+      run: docker pull ${{ env.image_url }}
 
     - name: check syntax
       id: check-syntax
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: check syntax
-        setup-command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pip list" # Run setup in container
-        command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pytest --json-report --json-report-indent=4 --json-report-file=/app/${{ steps.json.outputs.syntax }} tests/test_syntax.py" # Run test in container
+        setup-command: "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} ${{ env.image_url }} python3 -m pip list"
+        command:       "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} --env STUDENT_CODE_FOLDER=${{ env.container_student_code_folder }} ${{ env.image_url }} python3 -m pytest --json-report --json-report-indent=4 --json-report-file=${{ env.container_json_report_folder }}/${{ env.syntax }} ${{ env.container_test_code_folder }}/test_syntax.py" # Run test in container
         timeout: 1
-        max-score: 1
+        max-score: 2
 
     - name: check style
       id: check-style
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: check style
-        setup-command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pip list" # Run setup in container
-        command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pytest --json-report --json-report-indent=4 --json-report-file=/app/${{ steps.json.outputs.style }} tests/test_style.py" # Run test in container
+        setup-command: "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} ${{ env.image_url }} python3 -m pip list"
+        command:       "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} --env STUDENT_CODE_FOLDER=${{ env.container_student_code_folder }} ${{ env.image_url }} python3 -m pytest --json-report --json-report-indent=4 --json-report-file=${{ env.container_json_report_folder }}/${{ env.style }} ${{ env.container_test_code_folder }}/test_style.py" # Run test in container
         timeout: 1
         max-score: 1
 
@@ -52,10 +70,10 @@ jobs:
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: test results
-        setup-command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pip list" # Run setup in container
-        command: "docker run --rm --user 1001:1001 -v $(pwd):/app ghcr.io/kangwonlee/edu-base:0.2.4 python3 -m pytest -n auto --json-report --json-report-indent=4 --json-report-file=/app/${{ steps.json.outputs.results }} tests/test_results.py" # Run test in container
+        setup-command: "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} ${{ env.image_url }} python3 -m pip list"
+        command:       "docker run --rm --user 1001:1001 --volume ${{ github.workspace }}:${{ env.container_mounting_point }} --env STUDENT_CODE_FOLDER=${{ env.container_student_code_folder }} ${{ env.image_url }} python3 -m pytest -n auto --json-report --json-report-indent=4 --json-report-file=${{ env.container_json_report_folder }}/${{ env.results }} ${{ env.container_test_code_folder }}/test_results.py" # Run test in container
         timeout: 2
-        max-score: 3
+        max-score: 2
 
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
@@ -70,14 +88,15 @@ jobs:
       id: ai-tutor
       if: always()
       run: |
-        docker run --rm --user 1001:1001 -v $(pwd):/app/workspace \
-            --env INPUT_REPORT-FILES="workspace/${{ steps.json.outputs.results }},workspace/${{ steps.json.outputs.syntax }},workspace/${{ steps.json.outputs.style }}" \
-            --env INPUT_STUDENT-FILES="workspace/exercise.py" \
-            --env INPUT_README-PATH="workspace/README.md" \
-            --env INPUT_API-KEY="${{ secrets.GOOGLE_API_KEY }}" \
-            --env INPUT_EXPLANATION-IN="Korean" \
-            ghcr.io/kangwonlee/edu-base:0.2.4 \
-            python3 ai_tutor/entrypoint.py
+        docker run --rm --user 1001:1001 \
+          --volume ${{ github.workspace }}:${{ env.container_mounting_point }} \
+          --env INPUT_REPORT-FILES="${{ env.container_mounting_point }}/${{ env.results }},${{ env.container_mounting_point }}/${{ env.syntax }},${{ env.container_mounting_point }}/${{ env.style }}" \
+          --env INPUT_STUDENT-FILES="${{ env.container_student_code_folder }}/exercise.py" \
+          --env INPUT_README-PATH="${{ env.container_student_code_folder }}/README.md" \
+          --env INPUT_API-KEY="${{ secrets.GOOGLE_API_KEY }}" \
+          --env INPUT_EXPLANATION-IN="Korean" \
+          ${{ env.image_url }} \
+          python3 ai_tutor/entrypoint.py
       timeout-minutes: 2
 
     - name: upload artifacts
