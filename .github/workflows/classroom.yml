@@ -17,15 +17,31 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Check payload
+      env:
+        REPO: ${{ github.event.client_payload.repository }}
+        BUILD_IMAGE_URL: ${{ github.event.client_payload.image_url }}
+      run: |
+        echo "REPO=$REPO"
+        echo "BUILD_IMAGE_URL=$BUILD_IMAGE_URL"
+
     - name: Set report file names
       id: json
+      env:
+        BUILD_IMAGE_URL: ${{ github.event.client_payload.image_url }}
       run: |
         echo "syntax=report_syntax.json" >> $GITHUB_ENV
         echo "style=report_style.json" >> $GITHUB_ENV
         echo "results=report_results.json" >> $GITHUB_ENV
-        echo "image_url=${{ vars.PYTHON_GRADER_060 }}" >> $GITHUB_ENV
         echo "workflow_student_code_folder=${{ github.workspace }}" >> $GITHUB_ENV
         echo "container_mounting_point=/app/workspace" >> $GITHUB_ENV
+        if [[ $BUILD_IMAGE_URL ]] then
+          echo "using payload image url : $BUILD_IMAGE_URL"
+          echo "image_url=$BUILD_IMAGE_URL" >> $GITHUB_ENV
+        else
+          echo "using vars image url : ${{ vars.PYTHON_GRADER_060 }}"
+          echo "image_url=${{ vars.PYTHON_GRADER_060 }}" >> $GITHUB_ENV
+        fi
 
     # container_json_report_folder has to be a location under
     #   `container_mounting_point`
